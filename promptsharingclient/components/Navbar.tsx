@@ -5,7 +5,7 @@ import logo from "@/public/logo.png";
 export const Navbar = () => {
 
     return (
-        <nav className='flex p-3 items-center fixed w-full bg-transparent text-black shadow-sm' role='navigation'>
+        <nav className='flex p-3 items-center w-full bg-transparent text-black shadow-sm' role='navigation'>
             <div className='flex items-center space-x-2'>
                 <div>
                     <Image src={logo} alt='logo' className='w-12 h-12' />
@@ -15,8 +15,8 @@ export const Navbar = () => {
                 </h1>
             </div>
             <div className='flex items-center space-x-4 ml-auto'>
-            <button className="btn btn-outline-warning  border-orange-400 text-orange-400 hover:bg-orange-400">Login</button>
-            <button className="btn btn-warning  bg-orange-400 text-white">Sign Up</button>
+            <button className="btn btn-outline-warning  border-orange-400 text-orange-400 hover:bg-orange-400 font-bold">Login</button>
+            <button className="btn btn-warning  bg-orange-400 text-white font-bold">Sign Up</button>
             </div>
         </nav>
     );
