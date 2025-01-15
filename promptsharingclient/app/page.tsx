@@ -16,8 +16,8 @@ const HeroSection = () => {
 
 const PromptSection = () => {
 	return (
-		<div>
-			prompts
+		<div className="flex flex-col gap-1 px-7 mt-4 items-center justify-center ">
+			<input className="input-ghost-primary border-gray-600 hover:border-orange-500 focus:border-orange-500 text-gray-800 active:border-orange-500 md:w-1/2 lg:w-1/2 input-block input rounded-none bg-white" placeholder="Search thousands of prompts" />
 		</div>
 	)
 }	
