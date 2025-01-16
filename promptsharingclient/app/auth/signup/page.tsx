@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from 'react'
+import Image from 'next/image';
 import Link from 'next/link';
 import { Alert } from '@/components/Alert';
+import google from "@/public/google.png"
 
 
 const Page = () => {
@@ -21,9 +23,13 @@ const Page = () => {
                         <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)} className="checkbox checkbox-solid-success checked:bg-orange-500 checked:border-orange-500 hover:transition-none" />
                         <label>Show Password</label>
                     </div>
-                    <div className="card-footer w-full flex gap-2 flex-col mt-5">
+                    <div className="card-footer w-full flex gap-3 flex-col mt-5">
                         <button className="btn btn-warning w-full  bg-orange-400 text-white font-bold">Sign Up</button>
                         <p>Already have an account? <Link href={"/auth/login"} className='link link-warning link-underline text-orange-500'>Login</Link></p>
+                        <button className="btn btn-block flex gap-2 border-2 border-gray-500 rounded-3xl google-login-button">
+                            <Image src={google} alt="Google" className="h-4 w-4" />
+                            <p>Sign Up with Google</p>
+                        </button>
                     </div>
                 </div>
             </div>
