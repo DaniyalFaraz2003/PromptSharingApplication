@@ -21,7 +21,7 @@ const Page = () => {
                     </div>
                     <div className="card-footer w-full flex gap-2 flex-col mt-5">
                         <button className="btn w-full btn-outline-warning  border-orange-400 text-orange-400 hover:bg-orange-400 font-bold">Login</button>
-                        <p>Dont have an account? <Link href={"/signup"} className='link link-warning link-underline text-orange-500'>Sign Up</Link></p>
+                        <p>Dont have an account? <Link href={"/auth/signup"} className='link link-warning link-underline text-orange-500'>Sign Up</Link></p>
                     </div>
                 </div>
             </div>

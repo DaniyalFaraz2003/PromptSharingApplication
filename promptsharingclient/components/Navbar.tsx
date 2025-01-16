@@ -16,10 +16,12 @@ export const Navbar = () => {
                 </h1>
             </div>
             <div className='flex items-center space-x-4 ml-auto'>
-                <Link href='/login'>
+                <Link href='/auth/login'>
                     <button className="btn btn-outline-warning  border-orange-400 text-orange-400 hover:bg-orange-400 font-bold">Login</button>
                 </Link>
-                <button className="btn btn-warning  bg-orange-400 text-white font-bold">Sign Up</button>
+                <Link href='/auth/signup'>
+                    <button className="btn btn-warning  bg-orange-400 text-white font-bold">Sign Up</button>
+                </Link>
             </div>
         </nav>
     );
