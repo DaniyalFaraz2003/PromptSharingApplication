@@ -6,6 +6,20 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  rippleui: {
+    removeThemes: ["dark"],
+		themes: [
+			{
+				themeName: "light",
+				colorScheme: "light",
+        prefersColorScheme: true,
+				colors: {
+					primary: "#235264",
+					backgroundPrimary: "#964643",
+				},
+			},
+		],
+	},
   theme: {
     extend: {
       colors: {

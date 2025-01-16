@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from "next/image";
 import logo from "@/public/logo.png";
+import Link from 'next/link';
 
 export const Navbar = () => {
 
@@ -15,8 +16,10 @@ export const Navbar = () => {
                 </h1>
             </div>
             <div className='flex items-center space-x-4 ml-auto'>
-            <button className="btn btn-outline-warning  border-orange-400 text-orange-400 hover:bg-orange-400 font-bold">Login</button>
-            <button className="btn btn-warning  bg-orange-400 text-white font-bold">Sign Up</button>
+                <Link href='/login'>
+                    <button className="btn btn-outline-warning  border-orange-400 text-orange-400 hover:bg-orange-400 font-bold">Login</button>
+                </Link>
+                <button className="btn btn-warning  bg-orange-400 text-white font-bold">Sign Up</button>
             </div>
         </nav>
     );
