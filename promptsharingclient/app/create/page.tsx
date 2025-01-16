@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react'
+import Link from 'next/link';
 import { PromptCard } from '@/components/PromptCard';
 import type { Prompt } from '@/components/PromptCard';
 import { Trash } from 'lucide-react';
@@ -52,7 +53,9 @@ const Form = ({ title, body, tags, handleDataChange, handleSubmit }: any) => {
 				<div className="mt-4 flex gap-5">
 					<div className='basis-1/2'></div>
 					<div className='flex gap-5'>
-						<button type="button" className="rounded-lg btn  btn-block border-2 border-orange-500 text-orange-500 bg-transparent font-bold">Cancel</button>
+						<Link href="/">
+							<button type="button" className="rounded-lg btn  btn-block border-2 border-orange-500 text-orange-500 bg-transparent font-bold">Cancel</button>
+						</Link>
 						<button type="submit" className="rounded-lg btn btn-primary btn-block bg-orange-500 font-bold">Create</button>
 					</div>
 				</div>
@@ -119,7 +122,7 @@ const Page = () => {
 					<label htmlFor="tab-5" className="tab tab-bordered flex text-center basis-1/2 px-6 justify-center font-bold">Preview</label>
 				</div>
 				{viewMode === "input" ? <Form {...promptData} handleSubmit={handleSubmit} handleDataChange={handlePromptDataChange} /> : <div className='p-8 flex justify-center'>
-					<PromptCard {...promptData} />	
+					<PromptCard {...promptData} />
 				</div>}
 
 			</section>
