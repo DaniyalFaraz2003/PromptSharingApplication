@@ -3,8 +3,22 @@
 import React, { useState } from 'react'
 import { PromptCard } from '@/components/PromptCard';
 import type { Prompt } from '@/components/PromptCard';
+import { Trash } from 'lucide-react';
+
+
+const Tag = ({ value, index, handleDataChange }: any) => {
+	return (
+		<div className='flex gap-2'>
+			<span className="rounded-lg py-2 px-4 flex gap-3 bg-orange-500 text-white">{value}
+				<Trash size={20} className='cursor-pointer' onClick={() => handleDataChange("remove", index)} />
+			</span>
+		</div>
+	)
+}
 
 const Form = ({ title, body, tags, handleDataChange, handleSubmit }: any) => {
+	const [tag, setTag] = useState<string>("");
+
 	return (
 		<div className="p-8 shadow-lg">
 			<form className="space-y-4" onSubmit={handleSubmit}>
@@ -22,12 +36,17 @@ const Form = ({ title, body, tags, handleDataChange, handleSubmit }: any) => {
 
 				<div className='w-full flex gap-4'>
 					<label className="sr-only" htmlFor="tags">Tags</label>
-					<input className="input input-solid max-w-full" placeholder="Enter Tags (Max 3)" type="text" id="tags" />
-					<button className='btn btn-primary bg-orange-500'>Add</button>
+					<input value={tag} onChange={(event) => setTag(event.target.value.split(' ')[0])} className="input input-solid max-w-full" placeholder="Enter Tags (Max 3)" type="text" id="tags" />
+					<button type='button' onClick={() => {
+						handleDataChange("tag", tag)
+						setTag("")
+					}} className='btn btn-primary bg-orange-500'>Add</button>
 				</div>
 
-				<div className=''>
-
+				<div className='flex gap-2 flex-wrap'>
+					{tags.map((tag: string, index: number) => (
+						<Tag key={index} value={tag} handleDataChange={handleDataChange} index={index} />
+					))}
 				</div>
 
 				<div className="mt-4 flex gap-5">
@@ -55,16 +74,18 @@ const Page = () => {
 	const handleViewModeChange = (mode: string) => {
 		setViewMode(mode);
 	}
-	const handlePromptDataChange = (field: string, value: string) => {
+	const handlePromptDataChange = (field: string, value: any) => {
 		if (field === "tag") {
-			setPromptData({
-				...promptData,
-				tags: [...promptData.tags, value]
-			})
+			if (promptData.tags.length < 3) {
+				setPromptData({
+					...promptData,
+					tags: [...promptData.tags, value]
+				})
+			}
 		} else if (field === "remove") {
 			setPromptData({
 				...promptData,
-				tags: promptData.tags.filter((tag) => tag !== value)
+				tags: promptData.tags.filter((_, index) => index !== value)
 			})
 		} else {
 			setPromptData({
@@ -97,7 +118,9 @@ const Page = () => {
 					<input type="radio" value={"preview"} checked={viewMode === "preview"} onChange={() => handleViewModeChange("preview")} id="tab-5" name="tab-2" className="tab-toggle" />
 					<label htmlFor="tab-5" className="tab tab-bordered flex text-center basis-1/2 px-6 justify-center font-bold">Preview</label>
 				</div>
-				{viewMode === "input" ? <Form {...promptData} handleSubmit={handleSubmit} handleDataChange={handlePromptDataChange} /> : <PromptCard {...promptData} />}
+				{viewMode === "input" ? <Form {...promptData} handleSubmit={handleSubmit} handleDataChange={handlePromptDataChange} /> : <div className='p-8 flex justify-center'>
+					<PromptCard {...promptData} />	
+				</div>}
 
 			</section>
 		</div>
