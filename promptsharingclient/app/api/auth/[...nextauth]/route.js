@@ -32,7 +32,7 @@ const handler = NextAuth({
             name: profile.name,
             email: profile.email,
             username: profile.name.replace(" ", "").toLowerCase() + Math.floor(Math.random() * 1000),
-            password: "",
+            password: "Anything1",
             image: profile.picture,
           });
         }

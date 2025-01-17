@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 let isConnected = false; // track the connection
-let mongoUri: any = process.env.MONGODB_URI;
+let mongoUri: any = process.env.MONGO_URI;
 
 export const connectToDB = async () => {
     mongoose.set('strictQuery', true);

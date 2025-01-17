@@ -1,14 +1,24 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link';
 import { Alert } from '@/components/Alert';
 import Image from 'next/image';
 import google from "@/public/google.png"
+import { signIn, getProviders } from 'next-auth/react';
 
 
 const Page = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [providers, setProviders] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            const res: any = await getProviders();
+            setProviders(res);
+        })();
+    }, []);
+
     return (
         <div className='flex flex-col items-center justify-center w-full mt-14'>
 
@@ -25,10 +35,15 @@ const Page = () => {
                         <button className="btn w-full btn-outline-warning  border-orange-400 text-orange-400 hover:bg-orange-400 font-bold">Login</button>
                         <p>Dont have an account? <Link href={"/auth/signup"} className='link link-warning link-underline text-orange-500'>Sign Up</Link></p>
 
-                        <button className="btn btn-block flex gap-2 border-2 border-gray-500 rounded-3xl google-login-button">
-                            <Image src={google} alt="Google" className="h-4 w-4" />
-                            <p>Sign In with Google</p>
-                        </button>
+                        {providers &&
+                            Object.values(providers).map((provider: any) => (
+                                <button type='button' key={provider.name} onClick={() => signIn(provider.id)} className="btn btn-block flex gap-2 border-2 border-gray-500 rounded-3xl google-login-button">
+                                    <Image src={google} alt="Google" className="h-4 w-4" />
+                                    <p>Sign In with Google</p>
+                                </button>
+                            ))}
+
+
                     </div>
                 </div>
             </div>
