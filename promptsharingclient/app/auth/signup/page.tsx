@@ -1,17 +1,36 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
 import { Alert } from '@/components/Alert';
 import google from "@/public/google.png"
-
+import { signIn, getProviders, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [providers, setProviders] = useState(null);
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            router.push("/"); // Replace with your desired page
+        }
+    }, [session, status, router]);
+
+    useEffect(() => {
+        (async () => {
+            const res: any = await getProviders();
+            setProviders(res);
+        })();
+
+
+    }, []);
     return (
         <div className='flex flex-col items-center justify-center w-full mt-14'>
-            
+
             <div className="card bg-white border-4 border-orange-500">
                 <div className="card-body flex">
                     <h2 className="card-header self-center text-2xl mb-5">Sign Up</h2>
@@ -26,10 +45,13 @@ const Page = () => {
                     <div className="card-footer w-full flex gap-3 flex-col mt-5">
                         <button className="btn btn-warning w-full  bg-orange-400 text-white font-bold">Sign Up</button>
                         <p>Already have an account? <Link href={"/auth/login"} className='link link-warning link-underline text-orange-500'>Login</Link></p>
-                        <button className="btn btn-block flex gap-2 border-2 border-gray-500 rounded-3xl google-login-button">
-                            <Image src={google} alt="Google" className="h-4 w-4" />
-                            <p>Sign Up with Google</p>
-                        </button>
+                        {providers &&
+                            Object.values(providers).map((provider: any) => (
+                                <button type='button' key={provider.name} onClick={() => signIn(provider.id)} className="btn btn-block flex gap-2 border-2 border-gray-500 rounded-3xl google-login-button">
+                                    <Image src={google} alt="Google" className="h-4 w-4" />
+                                    <p>Sign Up with Google</p>
+                                </button>
+                            ))}
                     </div>
                 </div>
             </div>

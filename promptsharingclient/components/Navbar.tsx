@@ -19,7 +19,38 @@ export const Navbar = () => {
                     <a href='/' className='text-2xl/7 font-bold text-transparent bg-clip-text bg-gradient-to-tr from-orange-700 via-orange-400 to-yellow-400 sm:truncate sm:text-3xl sm:tracking-tight'>SharePrompt</a>
                 </h1>
             </div>
-            {!session?.user && (
+
+            {session?.user ? (
+                <div className='flex items-center space-x-4 ml-auto'>
+                    <h1 className='font-bold text-xl text-black'>{session?.user.name}</h1>
+                    <div className="popover">
+                        {session?.user.image ? (
+                            <>
+                                <label className='popover-trigger' tabIndex={0}>
+                                    <Image
+                                        src={session?.user.image}
+                                        width={37}
+                                        height={37}
+                                        className='rounded-full'
+                                        alt='profile'
+                                    />
+                                </label>
+                                <div className="popover-content popover-bottom-left w-32" tabIndex={0}>
+                                    <button onClick={() => signOut()} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <label className="popover-trigger btn p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>DF</label>
+                                <div className="popover-content popover-bottom-left w-32" tabIndex={0}>
+                                    <button onClick={() => signOut()} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
+                                </div>
+                            </>
+                        )}
+
+                    </div>
+                </div>
+            ) : (
                 <div className='flex items-center space-x-4 ml-auto'>
                     <Link href='/auth/login'>
                         <button className="btn btn-outline-warning  border-orange-400 text-orange-400 hover:bg-orange-400 font-bold">Login</button>
@@ -27,30 +58,6 @@ export const Navbar = () => {
                     <Link href='/auth/signup'>
                         <button className="btn btn-warning  bg-orange-400 text-white font-bold">Sign Up</button>
                     </Link>
-                </div>
-            )}
-
-            {session?.user && (
-                <div className='flex items-center space-x-4 ml-auto'>
-                    <h1 className='font-bold text-xl text-black'>{session?.user.name}</h1>
-                    <div className="popover">
-                        {session?.user.image ? (
-                            <label className='popover-trigger'>
-                                <Image
-                                    src={session?.user.image}
-                                    width={37}
-                                    height={37}
-                                    className='rounded-full'
-                                    alt='profile'
-                                />
-                            </label>
-                        ) : (
-                            <label className="popover-trigger btn p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>DF</label>
-                        )}
-                        <div className="popover-content popover-bottom-left w-32" tabIndex={0}>
-                            <button onClick={() => signOut()} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
-                        </div>
-                    </div>
                 </div>
             )}
         </nav>

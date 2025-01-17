@@ -5,18 +5,28 @@ import Link from 'next/link';
 import { Alert } from '@/components/Alert';
 import Image from 'next/image';
 import google from "@/public/google.png"
-import { signIn, getProviders } from 'next-auth/react';
+import { signIn, getProviders, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 
 const Page = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [providers, setProviders] = useState(null);
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            router.push("/"); // Replace with your desired page
+        }
+    }, [session, status, router]);
 
     useEffect(() => {
         (async () => {
             const res: any = await getProviders();
             setProviders(res);
         })();
+
     }, []);
 
     return (
