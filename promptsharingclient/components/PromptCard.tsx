@@ -4,6 +4,7 @@ import React from 'react';
 
 
 export type Prompt = {
+    image: string
     id: string
     username: string
     title: string
@@ -13,12 +14,12 @@ export type Prompt = {
 
 
 
-export const PromptCard = ({ id, username, title, body, tags }: Prompt) => {
+export const PromptCard = ({ id, image, username, title, body, tags }: Prompt) => {
     return (
         <div className="group card w-80 p-5 bg-white border-4 border-black transition-transform hover:translate-y-[-5px] hover:border-orange-500">
             <div className="flex gap-3 items-center">
                 <div className="avatar">
-                    <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
+                    <img src={image} alt="avatar" />
                 </div>
                 <p className="font-bold text-lg">
                     <span className="glitch">{username}</span>

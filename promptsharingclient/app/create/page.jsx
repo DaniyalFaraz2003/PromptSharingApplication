@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link';
 import { PromptCard } from '@/components/PromptCard';
-import type { Prompt } from '@/components/PromptCard';
 import { Trash } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 
-const Tag = ({ value, index, handleDataChange }: any) => {
+const Tag = ({ value, index, handleDataChange }) => {
 	return (
 		<div className='flex gap-2'>
 			<span className="rounded-lg py-2 px-4 flex gap-3 bg-orange-500 text-white">{value}
@@ -17,8 +17,8 @@ const Tag = ({ value, index, handleDataChange }: any) => {
 	)
 }
 
-const Form = ({ title, body, tags, handleDataChange, handleSubmit }: any) => {
-	const [tag, setTag] = useState<string>("");
+const Form = ({ title, body, tags, handleDataChange, handleSubmit }) => {
+	const [tag, setTag] = useState("");
 
 	return (
 		<div className="p-8 shadow-lg">
@@ -45,7 +45,7 @@ const Form = ({ title, body, tags, handleDataChange, handleSubmit }: any) => {
 				</div>
 
 				<div className='flex gap-2 flex-wrap'>
-					{tags.map((tag: string, index: number) => (
+					{tags.map((tag, index) => (
 						<Tag key={index} value={tag} handleDataChange={handleDataChange} index={index} />
 					))}
 				</div>
@@ -66,18 +66,32 @@ const Form = ({ title, body, tags, handleDataChange, handleSubmit }: any) => {
 
 
 const Page = () => {
-	const [viewMode, setViewMode] = useState<string>("input");
-	const [promptData, setPromptData] = useState<Prompt>({
+	const { data: session, status } = useSession();
+	const [viewMode, setViewMode] = useState("input");
+	const [promptData, setPromptData] = useState({
+		image: session?.user?.image || "",
 		id: "",
-		username: "",
+		username: session?.user?.username || "",
 		title: "",
 		body: "",
 		tags: []
 	})
-	const handleViewModeChange = (mode: string) => {
+
+	useEffect(() => {
+		if (status === "authenticated") {
+			setPromptData({
+				...promptData,
+				image: session.user.image,
+				username: session.user.username
+			})
+		}
+	}, [status])
+
+
+	const handleViewModeChange = (mode) => {
 		setViewMode(mode);
 	}
-	const handlePromptDataChange = (field: string, value: any) => {
+	const handlePromptDataChange = (field, value) => {
 		if (field === "tag") {
 			if (promptData.tags.length < 3) {
 				setPromptData({
@@ -98,12 +112,11 @@ const Page = () => {
 		}
 	}
 
-	const handleSubmit = (event: any) => {
+	const handleSubmit = (event) => {
 		event.preventDefault();
 		console.log(promptData);
 		setPromptData({
-			id: "",
-			username: "",
+			...promptData,
 			title: "",
 			body: "",
 			tags: []

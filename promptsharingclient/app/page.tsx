@@ -1,9 +1,14 @@
+"use client";
+
 import React from "react"
 import Link from "next/link"
 import { PromptCard } from "@/components/PromptCard"
 import type { Prompt } from "@/components/PromptCard"
+import { useSession } from "next-auth/react"
 
 const HeroSection = () => {
+	const { data: session } = useSession()
+
 	return (
 		<div className="mt-14 flex flex-col gap-1 px-7  items-center justify-center">
 			<h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-orange-700 via-orange-400 to-yellow-400 tracking-tight text-center">Unlock Creativity, Share Inspiration</h1>
@@ -11,7 +16,7 @@ const HeroSection = () => {
 				Discover, create, and share prompts that fuel imagination and productivity — join a community where ideas come to life.
 			</p>
 			<div className="mt-8 w-full max-w-sm">
-				<Link href="/create">
+				<Link href={session ? "/create" : "/auth/login"}>
 					<button className="btn btn-solid-warning btn-block bg-orange-500 hover:bg-transparent text-white font-bold border-2 border-orange-500 hover:text-orange-500">Create Your Prompt Now</button>
 				</Link>
 			</div>
@@ -23,6 +28,7 @@ const HeroSection = () => {
 const PromptSection = () => {
 	const prompts: Prompt[] = [
 		{
+			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
 			"id": "1",
 			"username": "promptWizard",
 			"title": "Creative Writing",
@@ -30,6 +36,7 @@ const PromptSection = () => {
 			"tags": ["writing", "storytelling", "creativity"]
 		},
 		{
+			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
 			"id": "2",
 			"username": "designPro",
 			"title": "UI/UX Ideas",
@@ -37,6 +44,7 @@ const PromptSection = () => {
 			"tags": ["design", "UI/UX", "creativity"]
 		},
 		{
+			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
 			"id": "3",
 			"username": "codeWhisperer",
 			"title": "Debugging Helper",
@@ -44,6 +52,7 @@ const PromptSection = () => {
 			"tags": ["coding", "debugging", "AI"]
 		},
 		{
+			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
 			"id": "4",
 			"username": "chatBotMaster",
 			"title": "Customer Support Bot",
@@ -51,6 +60,7 @@ const PromptSection = () => {
 			"tags": ["chatbot", "support", "customer"]
 		},
 		{
+			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
 			"id": "5",
 			"username": "marketingGuru",
 			"title": "Ad Copy Generator",
