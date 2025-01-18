@@ -2,6 +2,7 @@ package com.promptsharer.promptsharingapp.controller;
 
 import com.promptsharer.promptsharingapp.entity.JournalEntry;
 import com.promptsharer.promptsharingapp.service.JournalEntryService;
+import com.promptsharer.promptsharingapp.service.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,19 @@ import java.util.*;
 public class JournalEntryController {
     @Autowired
     private JournalEntryService journalEntryService;
+    @Autowired
+    private UserService userService;
 
-    @PostMapping
-    public ResponseEntity<?> saveJournalEntry(@RequestBody JournalEntry journalEntry) {
+    @PostMapping("/{username}")
+    public ResponseEntity<?> saveJournalEntry(@RequestBody JournalEntry journalEntry, @PathVariable String username) {
         journalEntry.setDate(LocalDateTime.now());
-        journalEntryService.saveEntry(journalEntry);
+        journalEntryService.saveEntry(journalEntry, username);
         return ResponseEntity.ok("Journal Entry saved successfully");
+    }
+
+    @GetMapping("/user/{username}")
+    public List<JournalEntry> getJournalEntriesByUser(@PathVariable String username) {
+        return userService.findByUserName(username).getJournalEntries();
     }
 
     @GetMapping
