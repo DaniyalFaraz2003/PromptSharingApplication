@@ -18,6 +18,12 @@ public class User {
     @Id
     private ObjectId id;
 
+    private String name;
+
+    @Indexed(unique = true)
+    @NonNull
+    private String email;
+
     @Indexed(unique = true)
     @NonNull
     private String username;
@@ -25,6 +31,6 @@ public class User {
     @NonNull
     private String password;
 
-    @DBRef
-    private List<JournalEntry> journalEntries = new ArrayList<>();
+    private String image;
+
 }

@@ -18,15 +18,7 @@ public class UserController {
 
     // Add your code here
 
-    @GetMapping
-    public List<User> getAll() {
-        return userService.getAll();
-    }
 
-    @PostMapping
-    public void create(@RequestBody User user) {
-        userService.saveEntry(user);
-    }
 
     @GetMapping("/{id}")
     public User getById(@PathVariable ObjectId id) {
