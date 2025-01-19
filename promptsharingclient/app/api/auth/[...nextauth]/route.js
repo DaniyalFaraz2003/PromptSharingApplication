@@ -32,8 +32,8 @@ const handler = NextAuth({
           await User.create({
             name: profile.name,
             email: profile.email,
-            username: profile.name.replace(" ", "").toLowerCase() + Math.floor(Math.random() * 1000),
-            password: "Anything1",
+            username: profile.email.split("@")[0],
+            password: "qwerpoiulkjasdfjklxmczbxcmv",
             image: profile.picture,
           });
         }
