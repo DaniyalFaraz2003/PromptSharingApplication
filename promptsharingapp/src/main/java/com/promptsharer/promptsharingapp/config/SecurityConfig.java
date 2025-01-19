@@ -31,6 +31,9 @@ public class SecurityConfig  {
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true))
                 .build();
     }
 
