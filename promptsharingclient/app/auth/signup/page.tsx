@@ -30,7 +30,7 @@ const Page = () => {
     }, []);
     return (
         <div className='flex flex-col items-center justify-center w-full mt-14'>
-
+            
             <div className="card bg-white border-4 border-orange-500">
                 <div className="card-body flex">
                     <h2 className="card-header self-center text-2xl mb-5">Sign Up</h2>
@@ -42,6 +42,7 @@ const Page = () => {
                         <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)} className="checkbox checkbox-solid-success checked:bg-orange-500 checked:border-orange-500 hover:transition-none" />
                         <label>Show Password</label>
                     </div>
+                    <Alert type='alert-warning' />
                     <div className="card-footer w-full flex gap-3 flex-col mt-5">
                         <button className="btn btn-warning w-full  bg-orange-400 text-white font-bold">Sign Up</button>
                         <p>Already have an account? <Link href={"/auth/login"} className='link link-warning link-underline text-orange-500'>Login</Link></p>
