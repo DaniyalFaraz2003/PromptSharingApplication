@@ -33,7 +33,7 @@ const handler = NextAuth({
             name: profile.name,
             email: profile.email,
             username: profile.email.split("@")[0],
-            password: "qwerpoiulkjasdfjklxmczbxcmv",
+            password: "Qwerpoiulkjasdfjklxmczbxcmv1",
             image: profile.picture,
           });
         }
