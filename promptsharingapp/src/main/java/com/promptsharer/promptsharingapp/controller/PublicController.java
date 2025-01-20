@@ -25,7 +25,7 @@ public class PublicController {
             userService.saveNewUser(user);
             return ResponseEntity.ok("Sign Up Successful. Log In to Continue");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseEntity<>("Username already exists", org.springframework.http.HttpStatus.BAD_REQUEST);
         }
     }
 

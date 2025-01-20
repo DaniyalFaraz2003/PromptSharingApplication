@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import axios from "axios"
 
 
+
 const Page = () => {
     const [formData, setFormData] = useState({
         name: "",
@@ -41,17 +42,20 @@ const Page = () => {
                 setAlertData({ type: "alert-error", title: "Error", content: "Please fill all fields", show: true });
                 return;
             }
-            console.log(formData);
-            const res: any = await axios.post("http://localhost:8080/public/create-user", {...formData, email: formData.username + "@gmail.com"}, );
+            
+            const res: any = await axios.post("http://localhost:8080/public/create-user", { ...formData, email: formData.username + "@gmail.com" },);
             if (res.status === 200) {
                 setAlertData({ type: "alert-success", title: "Success", content: res.data, show: true });
-            } else if (res.status === 401) {
-                setAlertData({ type: "alert-warning", title: "Warning", content: "Unauthorized Access", show: true });
-            } else if (res.status === 400) {
-                setAlertData({ type: "alert-error", title: "Error", content: res.data, show: true });
             }
         } catch (error: any) {
-            setAlertData({ type: "alert-error", title: "Error", content: error.response.data.message, show: true });
+            if (error.response.status === 401) {
+                setAlertData({ type: "alert-warning", title: "Warning", content: "Unauthorized Access", show: true });
+            } else if (error.response.status === 400) {
+                setAlertData({ type: "alert-error", title: "Error", content: error.response.data, show: true });
+            } else {
+                setAlertData({ type: "alert-error", title: "Error", content: "Unexpected Error Occurred", show: true });
+
+            }
         }
         setFormData({ name: "", username: "", email: "", password: "", image: "none" });
         setConfirmPassword("");
@@ -79,7 +83,7 @@ const Page = () => {
     }, []);
     return (
         <div className='flex flex-col items-center justify-center w-full mt-14'>
-            
+
             <div className="card bg-white border-4 border-orange-500">
                 <div className="card-body flex">
                     <h2 className="card-header self-center text-2xl mb-5">Sign Up</h2>
@@ -91,8 +95,8 @@ const Page = () => {
                         <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)} className="checkbox checkbox-solid-success checked:bg-orange-500 checked:border-orange-500 hover:transition-none" />
                         <label>Show Password</label>
                     </div>
-                    
-                    {alertData.show && <Alert type={alertData.type} title={alertData.title} content={alertData.content} duration={5000} onDismiss={() => setAlertData({...alertData, show: false})} />}
+
+                    {alertData.show && <Alert type={alertData.type} title={alertData.title} content={alertData.content} duration={5000} onDismiss={() => setAlertData({ ...alertData, show: false })} />}
 
                     <div className="card-footer w-full flex gap-3 flex-col mt-5">
                         <button onClick={() => signUp()} className="btn btn-warning w-full  bg-orange-400 text-white font-bold">Sign Up</button>
