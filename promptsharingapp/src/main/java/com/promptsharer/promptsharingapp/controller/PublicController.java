@@ -1,6 +1,7 @@
 package com.promptsharer.promptsharingapp.controller;
 
 
+import com.mongodb.MongoWriteException;
 import com.promptsharer.promptsharingapp.entity.User;
 import com.promptsharer.promptsharingapp.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -20,8 +21,12 @@ public class PublicController {
 
     @PostMapping("create-user")
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        userService.saveNewUser(user);
-        return ResponseEntity.ok("User created successfully");
+        try {
+            userService.saveNewUser(user);
+            return ResponseEntity.ok("Sign Up Successful. Log In to Continue");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/login")

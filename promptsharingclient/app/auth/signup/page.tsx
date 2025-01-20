@@ -11,15 +11,16 @@ import axios from "axios"
 
 
 const Page = () => {
-    const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         username: "",
         email: "",
         password: "",
-        image: "",
+        image: "none",
     })
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [alertData, setAlertData] = useState({
+        show: false,
         type: "",
         title: "",
         content: "",
@@ -32,18 +33,30 @@ const Page = () => {
 
     const signUp = async () => {
         try {
-            //const res: any = await axios.post("/api/auth/signup", formData);
+            if (formData.password !== confirmPassword) {
+                setAlertData({ type: "alert-error", title: "Error", content: "Passwords do not match", show: true });
+                return;
+            }
+            if (formData.name === "" || formData.username === "" || formData.password === "") {
+                setAlertData({ type: "alert-error", title: "Error", content: "Please fill all fields", show: true });
+                return;
+            }
             console.log(formData);
+            const res: any = await axios.post("http://localhost:8080/public/create-user", {...formData, email: formData.username + "@gmail.com"}, );
+            if (res.status === 200) {
+                setAlertData({ type: "alert-success", title: "Success", content: res.data, show: true });
+            } else if (res.status === 401) {
+                setAlertData({ type: "alert-warning", title: "Warning", content: "Unauthorized Access", show: true });
+            } else if (res.status === 400) {
+                setAlertData({ type: "alert-error", title: "Error", content: res.data, show: true });
+            }
         } catch (error: any) {
-            setAlertData({ type: "alert-error", title: "Error", content: error.response.data.message });
-            triggerAlert();
+            setAlertData({ type: "alert-error", title: "Error", content: error.response.data.message, show: true });
         }
+        setFormData({ name: "", username: "", email: "", password: "", image: "none" });
+        setConfirmPassword("");
     }
 
-    
-    const triggerAlert = () => {
-        setShowAlert(true);
-    };
 
     useEffect(() => {
         if (status === "authenticated") {
@@ -73,16 +86,16 @@ const Page = () => {
                     <input value={formData.name} onChange={handleInputChange} name='name' className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Full Name" />
                     <input value={formData.username} onChange={handleInputChange} name='username' className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Username" />
                     <input value={formData.password} onChange={handleInputChange} name='password' type={`${showPassword ? "text" : "password"}`} className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Password" />
-                    <input name='password' type={`${showPassword ? "text" : "password"}`} className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Confirm Password" />
+                    <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} name='confirmPassword' type={`${showPassword ? "text" : "password"}`} className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Confirm Password" />
                     <div className='flex gap-2'>
                         <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)} className="checkbox checkbox-solid-success checked:bg-orange-500 checked:border-orange-500 hover:transition-none" />
                         <label>Show Password</label>
                     </div>
                     
-                    {showAlert && <Alert type={alertData.type} title={alertData.title} content={alertData.content} duration={5000} onDismiss={() => setShowAlert(false)} />}
+                    {alertData.show && <Alert type={alertData.type} title={alertData.title} content={alertData.content} duration={5000} onDismiss={() => setAlertData({...alertData, show: false})} />}
 
                     <div className="card-footer w-full flex gap-3 flex-col mt-5">
-                        <button onClick={signUp} className="btn btn-warning w-full  bg-orange-400 text-white font-bold">Sign Up</button>
+                        <button onClick={() => signUp()} className="btn btn-warning w-full  bg-orange-400 text-white font-bold">Sign Up</button>
                         <p>Already have an account? <Link href={"/auth/login"} className='link link-warning link-underline text-orange-500'>Login</Link></p>
                         {providers &&
                             Object.values(providers).map((provider: any) => (
