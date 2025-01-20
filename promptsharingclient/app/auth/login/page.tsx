@@ -81,9 +81,13 @@ const Page = () => {
                 if (res.status === 200) {
                     router.push("/");
                 }
+                console.log(res);
+                
                 return true;
             }
             catch (error) {
+                console.log(error);
+                
                 return false;
             }
         }
@@ -94,7 +98,7 @@ const Page = () => {
             }
         }
         
-    }, [session, status, router, formData]);
+    }, [session, status, router]);
 
     useEffect(() => {
         (async () => {
