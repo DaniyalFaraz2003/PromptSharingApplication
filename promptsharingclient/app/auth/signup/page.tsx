@@ -7,18 +7,54 @@ import { Alert } from '@/components/Alert';
 import google from "@/public/google.png"
 import { signIn, getProviders, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import axios from "axios"
+
 
 const Page = () => {
+    const [showAlert, setShowAlert] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+        image: "",
+    })
+    const [alertData, setAlertData] = useState({
+        type: "",
+        title: "",
+        content: "",
+    })
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [providers, setProviders] = useState(null);
     const { data: session, status } = useSession();
     const router = useRouter();
+
+
+    const signUp = async () => {
+        try {
+            //const res: any = await axios.post("/api/auth/signup", formData);
+            console.log(formData);
+        } catch (error: any) {
+            setAlertData({ type: "alert-error", title: "Error", content: error.response.data.message });
+            triggerAlert();
+        }
+    }
+
+    
+    const triggerAlert = () => {
+        setShowAlert(true);
+    };
 
     useEffect(() => {
         if (status === "authenticated") {
             router.push("/"); // Replace with your desired page
         }
     }, [session, status, router]);
+
+
+    const handleInputChange = (e: any) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
 
     useEffect(() => {
         (async () => {
@@ -34,16 +70,19 @@ const Page = () => {
             <div className="card bg-white border-4 border-orange-500">
                 <div className="card-body flex">
                     <h2 className="card-header self-center text-2xl mb-5">Sign Up</h2>
-                    <input name='name' className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Full Name" />
-                    <input name='username' className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Username" />
-                    <input name='password' type={`${showPassword ? "text" : "password"}`} className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Password" />
+                    <input value={formData.name} onChange={handleInputChange} name='name' className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Full Name" />
+                    <input value={formData.username} onChange={handleInputChange} name='username' className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Username" />
+                    <input value={formData.password} onChange={handleInputChange} name='password' type={`${showPassword ? "text" : "password"}`} className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Password" />
                     <input name='password' type={`${showPassword ? "text" : "password"}`} className="input input-solid rounded-lg text-black bg-white focus:border-orange-500 active:border-orange-500 border-2 px-3 border-gray-500" placeholder="Confirm Password" />
                     <div className='flex gap-2'>
                         <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)} className="checkbox checkbox-solid-success checked:bg-orange-500 checked:border-orange-500 hover:transition-none" />
                         <label>Show Password</label>
                     </div>
+                    
+                    {showAlert && <Alert type={alertData.type} title={alertData.title} content={alertData.content} duration={5000} onDismiss={() => setShowAlert(false)} />}
+
                     <div className="card-footer w-full flex gap-3 flex-col mt-5">
-                        <button className="btn btn-warning w-full  bg-orange-400 text-white font-bold">Sign Up</button>
+                        <button onClick={signUp} className="btn btn-warning w-full  bg-orange-400 text-white font-bold">Sign Up</button>
                         <p>Already have an account? <Link href={"/auth/login"} className='link link-warning link-underline text-orange-500'>Login</Link></p>
                         {providers &&
                             Object.values(providers).map((provider: any) => (

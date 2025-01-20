@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 interface AlertProps {
-    type: 'alert-error' | 'alert-warning' | 'alert-success';
+    type: 'alert-error' | 'alert-warning' | 'alert-success' | string;
     title: string;
     content: string;
     duration?: number;
