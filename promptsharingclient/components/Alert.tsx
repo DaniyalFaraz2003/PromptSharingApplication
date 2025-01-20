@@ -1,21 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-type PropType = {
-    type: 'alert-error' | 'alert-warning' | 'alert-info' | 'alert-success'
-    title: string
-    content: string
+interface AlertProps {
+    type: 'alert-error' | 'alert-warning' | 'alert-success';
+    title: string;
+    content: string;
+    duration?: number;
+    onDismiss: () => void; // Callback to notify parent when the alert disappears
 }
 
-export const Alert = ({ type, title, content }: PropType) => {
+export const Alert: React.FC<AlertProps> = ({ type, title, content, duration = 5000, onDismiss }) => {
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            onDismiss(); // Notify the parent to hide the alert
+        }, duration);
+
+        // Cleanup the timer when the component unmounts
+        return () => clearTimeout(timer);
+    }, [duration, onDismiss]);
+
     if (type === 'alert-error') {
-        return <AlertError title="Error" content="An error occurred" />
+        return <AlertError title={title} content={content} />;
     } else if (type === 'alert-warning') {
-        return <AlertWarning title="Warning" content="A warning occurred" />
+        return <AlertWarning title={title} content={content} />;
     } else if (type === 'alert-success') {
-        return <AlertSuccess title="Success" content="A success occurred" />
+        return <AlertSuccess title={title} content={content} />;
     }
+
     return null;
-}
+};
 
 const AlertSuccess = ({ title, content }: { title: string, content: string }) => {
     return (
