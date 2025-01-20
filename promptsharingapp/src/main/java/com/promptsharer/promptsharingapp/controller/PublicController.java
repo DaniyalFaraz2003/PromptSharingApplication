@@ -23,8 +23,8 @@ public class PublicController {
         return ResponseEntity.ok("User created successfully");
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(HttpSession session, @RequestBody User user) {
+    @GetMapping("/login")
+    public ResponseEntity<?> login(HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         session.setAttribute("username", username);
@@ -33,13 +33,24 @@ public class PublicController {
 
     @GetMapping("/user")
     public ResponseEntity<?> getUser(HttpSession session) {
-        String username = (String) session.getAttribute("username");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        String currentSessionUser = (String) session.getAttribute("username");
+        if (currentSessionUser == null || !currentSessionUser.equals(username)) {
+            return ResponseEntity.badRequest().body("User not logged in");
+        }
         User user = userService.findByUserName(username);
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("/logout")
     public ResponseEntity<?> logout(HttpSession session) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        String currentSessionUser = (String) session.getAttribute("username");
+        if (currentSessionUser == null || !currentSessionUser.equals(username)) {
+            return ResponseEntity.badRequest().body("User not logged in");
+        }
         session.invalidate();
         return ResponseEntity.ok("Logout successful");
     }
