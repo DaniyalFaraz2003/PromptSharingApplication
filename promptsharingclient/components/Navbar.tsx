@@ -10,12 +10,21 @@ import { useAppSelector, useAppDispatch, useAppStore } from '../lib/hooks'
 import { removeData } from '@/lib/features/userSlice';
 import axios from 'axios';
 
+type User = {
+    name: string,
+    email: string,
+    username: string,
+    password: string,
+    image: string,
+    id: string
+}
+
 export const Navbar = () => {
     const { data: session } = useSession();
     const name = useAppSelector(state => state.user.username)
     const password = useAppSelector(state => state.user.password)   
     const dispatch = useAppDispatch()
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
     
     useEffect(() => {
         const getUserData = async () => {
@@ -76,15 +85,18 @@ export const Navbar = () => {
 
                     </div>
                 </div>
-            ) : name ? (
+            ) : user ? (
                 <div className='flex items-center space-x-4 ml-auto'>
-                    <h1 className='font-bold text-xl text-black'>{name}</h1>
+                    <h1 className='font-bold text-xl text-black'>{user.name}</h1>
                     <div className="popover">
 
                         <>
-                            <label className="popover-trigger btn p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>{name.split(' ')[0][0] + name.split(' ')[1][0]}</label>
+                            <label className="popover-trigger btn p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>{user.name.split(' ')[0][0] + user.name.split(' ')[1][0]}</label>
                             <div className="popover-content popover-bottom-left w-32" tabIndex={0}>
-                                <button onClick={() => dispatch(removeData())} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
+                                <button onClick={() => {
+                                    dispatch(removeData())
+                                    setUser(null)
+                                }} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
                             </div>
                         </>
                     </div>
