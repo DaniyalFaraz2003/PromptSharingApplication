@@ -1,13 +1,39 @@
 "use client";
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 
+import { useAppSelector, useAppDispatch, useAppStore } from '../lib/hooks'
+import { removeData } from '@/lib/features/userSlice';
+import axios from 'axios';
+
 export const Navbar = () => {
     const { data: session } = useSession();
+    const name = useAppSelector(state => state.user.username)
+    const password = useAppSelector(state => state.user.password)   
+    const dispatch = useAppDispatch()
+    const [user, setUser] = useState(null);
+    
+    useEffect(() => {
+        const getUserData = async () => {
+            try {
+                const res: any = await axios.get("http://localhost:8080/public/user", {
+                    auth: {
+                        username: name,
+                        password: password
+                    }
+                })
+                setUser(res.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        getUserData();
+    }, [])
 
     return (
         <nav className='flex p-3 items-center w-full bg-transparent text-black shadow-sm' role='navigation'>
@@ -48,6 +74,19 @@ export const Navbar = () => {
                             </>
                         )}
 
+                    </div>
+                </div>
+            ) : name ? (
+                <div className='flex items-center space-x-4 ml-auto'>
+                    <h1 className='font-bold text-xl text-black'>{name}</h1>
+                    <div className="popover">
+
+                        <>
+                            <label className="popover-trigger btn p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>{name.split(' ')[0][0] + name.split(' ')[1][0]}</label>
+                            <div className="popover-content popover-bottom-left w-32" tabIndex={0}>
+                                <button onClick={() => dispatch(removeData())} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
+                            </div>
+                        </>
                     </div>
                 </div>
             ) : (

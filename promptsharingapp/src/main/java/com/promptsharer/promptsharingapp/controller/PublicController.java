@@ -38,22 +38,11 @@ public class PublicController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> getUser(HttpSession session) {
-        String currentSessionUser = (String) session.getAttribute("username");
-        if (currentSessionUser == null) {
-            return ResponseEntity.badRequest().body("User not logged in");
-        }
-        User user = userService.findByUserName(currentSessionUser);
+    public ResponseEntity<?> getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByUserName(username);
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
-        String currentSessionUser = (String) session.getAttribute("username");
-        if (currentSessionUser == null) {
-            return ResponseEntity.badRequest().body("User not logged in");
-        }
-        session.invalidate();
-        return ResponseEntity.ok("Logout successful");
-    }
 }

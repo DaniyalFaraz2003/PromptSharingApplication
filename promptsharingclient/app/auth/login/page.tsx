@@ -74,32 +74,7 @@ const Page = () => {
         setFormData({ username: "", password: "" });
     }
 
-    useEffect(() => {
-        const checkSession = async () => {
-            try {
-                const res: any = await axios.get("http://localhost:8080/public/user");
-                if (res.status === 200) {
-                    router.push("/");
-                }
-                console.log(res);
-                
-                return true;
-            }
-            catch (error) {
-                console.log(error);
-                
-                return false;
-            }
-        }
-        
-        if (!checkSession()) {
-            if (status === "authenticated") {
-                router.push("/"); // Replace with your desired page
-            }
-        }
-        
-    }, [session, status, router]);
-
+  
     useEffect(() => {
         (async () => {
             const res: any = await getProviders();
