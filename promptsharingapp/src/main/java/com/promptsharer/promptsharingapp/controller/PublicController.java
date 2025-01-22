@@ -33,7 +33,6 @@ public class PublicController {
     public ResponseEntity<?> login(HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        session.setAttribute("username", username);
         return ResponseEntity.ok("Login successful");
     }
 

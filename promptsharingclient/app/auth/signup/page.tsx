@@ -8,10 +8,11 @@ import google from "@/public/google.png"
 import { signIn, getProviders, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import axios from "axios"
-
+import { useAppSelector } from '@/lib/hooks'
 
 
 const Page = () => {
+    const name = useAppSelector(state => state.user.username)
     const [formData, setFormData] = useState({
         name: "",
         username: "",
@@ -63,7 +64,7 @@ const Page = () => {
 
 
     useEffect(() => {
-        if (status === "authenticated") {
+        if (status === "authenticated" || name !== "") {
             router.push("/"); // Replace with your desired page
         }
     }, [session, status, router]);

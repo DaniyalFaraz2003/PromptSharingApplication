@@ -27,6 +27,7 @@ export const Navbar = () => {
     const [user, setUser] = useState<User | null>(null);
     
     useEffect(() => {
+        
         const getUserData = async () => {
             try {
                 const res: any = await axios.get("http://localhost:8080/public/user", {
@@ -41,8 +42,10 @@ export const Navbar = () => {
             }
         }
 
-        getUserData();
-    }, [])
+        if (name && password) {
+            getUserData()
+        }
+    }, [name, password])
 
     return (
         <nav className='flex p-3 items-center w-full bg-transparent text-black shadow-sm' role='navigation'>

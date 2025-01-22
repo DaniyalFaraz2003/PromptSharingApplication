@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link';
 import { Alert } from '@/components/Alert';
 import Image from 'next/image';
@@ -8,9 +8,14 @@ import google from "@/public/google.png"
 import { signIn, getProviders, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { setData } from '@/lib/features/userSlice';
 
 
 const Page = () => {
+    const name = useAppSelector(state => state.user.username)
+    const password = useAppSelector(state => state.user.password)
+    const dispatch = useAppDispatch()
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [providers, setProviders] = useState(null);
     const { data: session, status } = useSession();
@@ -51,12 +56,17 @@ const Page = () => {
                 }
             })
             if (res.status === 200) {
+                dispatch(setData({ username: formData.username, password: formData.password }))
+                
+
+
                 setAlertData({
                     show: true,
                     type: "alert-success",
                     title: "Success",
                     content: "Login Successful"
                 });
+
                 setTimeout(() => {
                     router.push("/");
                 }, 1000);
@@ -74,7 +84,14 @@ const Page = () => {
         setFormData({ username: "", password: "" });
     }
 
-  
+    useEffect(() => {
+        if (status === "authenticated" || name !== "") {
+
+
+            router.push("/"); // Replace with your desired page
+        }
+    }, [session, status, router]);
+
     useEffect(() => {
         (async () => {
             const res: any = await getProviders();

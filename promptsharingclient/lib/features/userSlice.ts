@@ -21,6 +21,7 @@ export const counterSlice = createSlice({
         setData: (state, action) => {
             state.username = action.payload.username
             state.password = action.payload.password
+            
         },
         removeData: (state) => {
             state.username = ''
@@ -32,8 +33,12 @@ export const counterSlice = createSlice({
 export const { setData, removeData } = counterSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectUser = (state: RootState) => {
-    return state.user
+export const selectUsername = (state: RootState) => {
+    return state.user.username
+}
+
+export const selectPassword = (state: RootState) => {
+    return state.user.password
 }
 
 export default counterSlice.reducer
