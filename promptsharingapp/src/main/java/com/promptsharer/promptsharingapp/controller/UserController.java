@@ -3,6 +3,7 @@ package com.promptsharer.promptsharingapp.controller;
 
 import com.promptsharer.promptsharingapp.entity.User;
 import com.promptsharer.promptsharingapp.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,15 @@ public class UserController {
     private UserService userService;
 
     // Add your code here
+
+
+    @GetMapping("/get-user")
+    public ResponseEntity<?> getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByUserName(username);
+        return ResponseEntity.ok(user);
+    }
 
     @PutMapping
     public ResponseEntity<?> saveUser(@RequestBody User user) {

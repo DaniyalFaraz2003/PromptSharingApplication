@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/public")
 public class PublicController {
@@ -36,12 +36,6 @@ public class PublicController {
         return ResponseEntity.ok("Login successful");
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<?> getUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userService.findByUserName(username);
-        return ResponseEntity.ok(user);
-    }
+
 
 }

@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 
 @Configuration
@@ -21,15 +22,19 @@ public class SecurityConfig  {
     @Autowired
     private UserDetailsService userDetailsService;
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 
-        return http.authorizeHttpRequests(request -> request
+        return http
+                .authorizeHttpRequests(request -> request
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/prompt/**", "/user/**").authenticated()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(new WebConfig(), ChannelProcessingFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement
                         .maximumSessions(1)

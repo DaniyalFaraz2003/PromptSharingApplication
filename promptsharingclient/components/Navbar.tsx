@@ -30,7 +30,7 @@ export const Navbar = () => {
         
         const getUserData = async () => {
             try {
-                const res: any = await axios.get("http://localhost:8080/public/user", {
+                const res: any = await axios.get("http://localhost:8080/user/get-user", {
                     auth: {
                         username: name,
                         password: password
