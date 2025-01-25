@@ -21,4 +21,8 @@ public class PromptService  {
         return promptRepository.findAll();
     }
 
+    public List<Prompt> getPromptsByAuthor(String username) {
+        return promptRepository.getPromptByAuthor_Username(username);
+    }
+
 }

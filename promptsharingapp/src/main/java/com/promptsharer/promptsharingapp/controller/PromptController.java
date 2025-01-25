@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/prompt")
 @RestController
@@ -24,7 +23,7 @@ public class PromptController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/save-prompt")
+    @PostMapping("/save")
     public ResponseEntity<?> savePrompt(@RequestBody Prompt prompt) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -34,5 +33,13 @@ public class PromptController {
         return ResponseEntity.ok("Prompt saved successfully");
     }
 
-    
+    @GetMapping("/all")
+    public ResponseEntity<List<Prompt>> getAllPrompts() {
+        return ResponseEntity.ok(promptService.getAllPrompts());
+    }
+
+    @GetMapping("/author/{username}")
+    public ResponseEntity<List<Prompt>> findByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(promptService.getPromptsByAuthor(username));
+    }
 }
