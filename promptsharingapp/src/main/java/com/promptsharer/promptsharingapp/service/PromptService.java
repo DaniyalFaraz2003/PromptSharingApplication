@@ -1,6 +1,7 @@
 package com.promptsharer.promptsharingapp.service;
 
 import com.promptsharer.promptsharingapp.entity.Prompt;
+import com.promptsharer.promptsharingapp.entity.User;
 import com.promptsharer.promptsharingapp.repository.PromptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,8 @@ public class PromptService  {
         return promptRepository.findAll();
     }
 
-    public List<Prompt> getPromptsByAuthor(String username) {
-        return promptRepository.getPromptByAuthor_Username(username);
+    public List<Prompt> getPromptsByAuthor(User author) {
+        return promptRepository.findByAuthor(author);
     }
 
 }
