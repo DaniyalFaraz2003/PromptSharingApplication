@@ -12,7 +12,6 @@ import { useAppSelector } from '@/lib/hooks'
 
 
 const Page = () => {
-    const name = useAppSelector(state => state.user.username)
     const [formData, setFormData] = useState({
         name: "",
         username: "",
@@ -64,7 +63,7 @@ const Page = () => {
 
 
     useEffect(() => {
-        if (status === "authenticated" || name !== "") {
+        if (status === "authenticated") {
             router.push("/"); // Replace with your desired page
         }
     }, [session, status, router]);

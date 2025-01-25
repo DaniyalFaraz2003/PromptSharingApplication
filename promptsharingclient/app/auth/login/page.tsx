@@ -8,7 +8,7 @@ import google from "@/public/google.png"
 import { signIn, getProviders, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { useAppDispatch } from '@/lib/hooks';
 import { setData } from '@/lib/features/userSlice';
 
 
@@ -125,8 +125,6 @@ const Page = () => {
                                     <p>Sign In with Google</p>
                                 </button>
                             ))}
-
-
                     </div>
                 </div>
             </div>

@@ -5,8 +5,10 @@ import Link from "next/link"
 import { PromptCard } from "@/components/PromptCard"
 import type { Prompt } from "@/components/PromptCard"
 import { useSession } from "next-auth/react"
+import { useAppSelector } from "@/lib/hooks";
 
 const HeroSection = () => {
+	const name = useAppSelector(state => state.user.username)
 	const { data: session } = useSession()
 
 	return (
@@ -16,7 +18,7 @@ const HeroSection = () => {
 				Discover, create, and share prompts that fuel imagination and productivity — join a community where ideas come to life.
 			</p>
 			<div className="mt-8 w-full max-w-sm">
-				<Link href={session ? "/create" : "/auth/login"}>
+				<Link href={(session || name) ? "/create" : "/auth/login"}>
 					<button className="btn btn-solid-warning btn-block bg-orange-500 hover:bg-transparent text-white font-bold border-2 border-orange-500 hover:text-orange-500">Create Your Prompt Now</button>
 				</Link>
 			</div>

@@ -54,7 +54,7 @@ export const Navbar = () => {
                     <Image src={logo} alt='logo' className='w-12 h-12' />
                 </div>
                 <h1>
-                    <a href='/' className='text-2xl/7 font-bold text-transparent bg-clip-text bg-gradient-to-tr from-orange-700 via-orange-400 to-yellow-400 sm:truncate sm:text-3xl sm:tracking-tight'>SharePrompt</a>
+                    <Link href='/' className='text-2xl/7 font-bold text-transparent bg-clip-text bg-gradient-to-tr from-orange-700 via-orange-400 to-yellow-400 sm:truncate sm:text-3xl sm:tracking-tight'>SharePrompt</Link>
                 </h1>
             </div>
 
