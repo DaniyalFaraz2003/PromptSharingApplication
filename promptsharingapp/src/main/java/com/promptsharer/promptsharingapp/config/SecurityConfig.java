@@ -36,9 +36,6 @@ public class SecurityConfig  {
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(new WebConfig(), ChannelProcessingFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionManagement -> sessionManagement
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true))
                 .build();
     }
 

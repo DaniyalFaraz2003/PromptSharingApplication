@@ -94,7 +94,7 @@ export const Navbar = () => {
                     <div className="popover">
 
                         <>
-                            <label className="popover-trigger btn p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>{user.name.split(' ')[0][0] + user.name.split(' ')[1][0]}</label>
+                            <label className="popover-trigger btn p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>{user.name.split(' ').length > 1 ? user.name.split(' ')[0][0] + user.name.split(' ')[user.name.split(' ').length - 1][0] : user.name[0]}</label>
                             <div className="popover-content popover-bottom-left w-32" tabIndex={0}>
                                 <button onClick={() => {
                                     dispatch(removeData())

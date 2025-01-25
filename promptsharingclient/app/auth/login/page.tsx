@@ -13,8 +13,6 @@ import { setData } from '@/lib/features/userSlice';
 
 
 const Page = () => {
-    const name = useAppSelector(state => state.user.username)
-    const password = useAppSelector(state => state.user.password)
     const dispatch = useAppDispatch()
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [providers, setProviders] = useState(null);
@@ -85,12 +83,13 @@ const Page = () => {
     }
 
     useEffect(() => {
-        if (status === "authenticated" || name !== "") {
+        if (status === "authenticated") {
 
 
             router.push("/"); // Replace with your desired page
         }
     }, [session, status, router]);
+
 
     useEffect(() => {
         (async () => {
