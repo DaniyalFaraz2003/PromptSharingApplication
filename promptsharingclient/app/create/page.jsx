@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { PromptCard } from '@/components/PromptCard';
 import { Trash } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { useAppSelector } from '@/lib/hooks';
+import { useRouter } from 'next/navigation';
 
 
 const Tag = ({ value, index, handleDataChange }) => {
@@ -66,6 +68,8 @@ const Form = ({ title, body, tags, handleDataChange, handleSubmit }) => {
 
 
 const Page = () => {
+	const router = useRouter();
+	const name = useAppSelector(state => state.user.username);
 	const { data: session, status } = useSession();
 	const [viewMode, setViewMode] = useState("input");
 	const [promptData, setPromptData] = useState({
@@ -76,6 +80,12 @@ const Page = () => {
 		body: "",
 		tags: []
 	})
+
+	useEffect(() => {
+		if (!session && !name) {
+			router.push("/")
+		}
+	}, [session, name])
 
 	useEffect(() => {
 		if (status === "authenticated") {

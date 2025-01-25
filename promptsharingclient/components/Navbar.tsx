@@ -1,12 +1,11 @@
 "use client";
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import logo from "@/public/logo.png";
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
-
-import { useAppSelector, useAppDispatch, useAppStore } from '../lib/hooks'
+import { useAppSelector, useAppDispatch } from '../lib/hooks'
 import { removeData } from '@/lib/features/userSlice';
 import axios from 'axios';
 
@@ -22,12 +21,21 @@ type User = {
 export const Navbar = () => {
     const { data: session } = useSession();
     const name = useAppSelector(state => state.user.username)
-    const password = useAppSelector(state => state.user.password)   
+    const password = useAppSelector(state => state.user.password)
     const dispatch = useAppDispatch()
     const [user, setUser] = useState<User | null>(null);
-    
+
+    const logout = (type: string) => {
+        if (type === 'session') {
+            signOut()
+        } else {
+            dispatch(removeData())
+            setUser(null)
+        }
+    }
+
     useEffect(() => {
-        
+
         const getUserData = async () => {
             try {
                 const res: any = await axios.get("http://localhost:8080/user/get-user", {
@@ -74,14 +82,14 @@ export const Navbar = () => {
                                     />
                                 </label>
                                 <div className="popover-content popover-bottom-left w-32" tabIndex={0}>
-                                    <button onClick={() => signOut()} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
+                                    <button onClick={() => logout('session')} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
                                 </div>
                             </>
                         ) : (
                             <>
                                 <label className="popover-trigger btn p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>DF</label>
                                 <div className="popover-content popover-bottom-left w-32" tabIndex={0}>
-                                    <button onClick={() => signOut()} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
+                                    <button onClick={() => logout('session')} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
                                 </div>
                             </>
                         )}
@@ -96,10 +104,7 @@ export const Navbar = () => {
                         <>
                             <label className="popover-trigger btn p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>{user.name.split(' ').length > 1 ? user.name.split(' ')[0][0] + user.name.split(' ')[user.name.split(' ').length - 1][0] : user.name[0]}</label>
                             <div className="popover-content popover-bottom-left w-32" tabIndex={0}>
-                                <button onClick={() => {
-                                    dispatch(removeData())
-                                    setUser(null)
-                                }} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
+                                <button onClick={() => logout('plain')} className="btn btn-warning bg-orange-400 text-white font-bold">Log Out</button>
                             </div>
                         </>
                     </div>
