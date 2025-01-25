@@ -7,6 +7,7 @@ import { Trash } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useAppSelector } from '@/lib/hooks';
 import { useRouter } from 'next/navigation';
+import axios from "axios"
 
 
 const Tag = ({ value, index, handleDataChange }) => {
@@ -70,16 +71,20 @@ const Form = ({ title, body, tags, handleDataChange, handleSubmit }) => {
 const Page = () => {
 	const router = useRouter();
 	const name = useAppSelector(state => state.user.username);
+	const password = useAppSelector(state => state.user.password);
 	const { data: session, status } = useSession();
 	const [viewMode, setViewMode] = useState("input");
 	const [promptData, setPromptData] = useState({
 		image: session?.user?.image || "",
 		id: "",
+		name: session?.user?.name || "",
 		username: session?.user?.username || "",
 		title: "",
 		body: "",
 		tags: []
 	})
+
+
 
 	useEffect(() => {
 		if (!session && !name) {
@@ -96,6 +101,32 @@ const Page = () => {
 			})
 		}
 	}, [status])
+
+	useEffect(() => {
+		const getUserData = async () => {
+			try {
+				const response = await axios.get("http://localhost:8080/user/get-user", {
+					auth: {
+						username: name,
+						password: password
+					}
+				})
+				setPromptData({
+					...promptData,
+					image: response.data.image,
+					username: response.data.username,
+					name: response.data.name
+				})
+			} catch (error) {
+				console.log(error)
+			}
+		}
+
+		if (name && password) {
+			getUserData();
+		}
+
+	}, [])
 
 
 	const handleViewModeChange = (mode) => {

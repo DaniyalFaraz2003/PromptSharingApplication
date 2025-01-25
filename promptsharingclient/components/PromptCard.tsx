@@ -6,6 +6,7 @@ import React from 'react';
 export type Prompt = {
     image: string
     id: string
+    name: string
     username: string
     title: string
     body: string
@@ -14,12 +15,14 @@ export type Prompt = {
 
 
 
-export const PromptCard = ({ id, image, username, title, body, tags }: Prompt) => {
+export const PromptCard = ({ id, image, name, username, title, body, tags }: Prompt) => {
     return (
         <div className="group card w-80 p-5 bg-white border-4 border-black transition-transform hover:translate-y-[-5px] hover:border-orange-500">
             <div className="flex gap-3 items-center">
                 <div className="avatar">
-                    <img src={image} alt="avatar" />
+                    {image === "none" ? (
+                        <label className="p-3 text-white bg-gray-600 rounded-full" tabIndex={0}>{name.split(' ').length > 1 ? name.split(' ')[0][0] + name.split(' ')[name.split(' ').length - 1][0] : name[0]}</label>
+                    ) : (<img src={image} alt="avatar" />)}
                 </div>
                 <p className="font-bold text-lg">
                     <span className="glitch">{username}</span>
