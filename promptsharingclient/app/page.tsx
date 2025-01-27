@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { PromptCard } from "@/components/PromptCard"
 import type { Prompt } from "@/components/PromptCard"
@@ -28,6 +28,13 @@ const HeroSection = () => {
 }
 
 const PromptSection = () => {
+
+	const [selectedValue, setSelectedValue] = useState("all");
+
+	const handleValueChange = (value: string) => {
+		setSelectedValue(value);
+	}
+
 	const prompts: Prompt[] = [
 		{
 			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
@@ -74,7 +81,26 @@ const PromptSection = () => {
 
 	return (
 		<div className="flex flex-col gap-1 px-7 mt-4 items-center justify-center ">
+
+
+
 			<input className="input-ghost-primary border-gray-600 hover:border-orange-500 focus:border-orange-500 text-gray-800 active:border-orange-500 md:w-1/2 lg:w-1/2 input-block input rounded-none bg-white" placeholder="Search thousands of prompts" />
+
+			<div className="grid w-[30%] place-items-center mt-5">
+				<div className="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2">
+					<div>
+						<input type="radio" onClick={() => handleValueChange("all")} name="all" id="all" value="all" className="peer hidden" checked={selectedValue === "all"} />
+						<label htmlFor="all" className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-orange-500 peer-checked:font-bold peer-checked:text-white">All Prompts</label>
+					</div>
+
+					<div>
+						<input type="radio" onClick={() => handleValueChange("my")} name="my" id="my" value="my" className="peer hidden" checked={selectedValue === "my"}/>
+						<label htmlFor="my" className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-orange-500 peer-checked:font-bold peer-checked:text-white">My Prompts</label>
+					</div>
+
+				</div>
+			</div>
+
 			<div className="mt-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 				{prompts.map((prompt) => (
 					<PromptCard key={prompt.id} {...prompt} />
