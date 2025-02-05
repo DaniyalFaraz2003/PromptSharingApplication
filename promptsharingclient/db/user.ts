@@ -20,7 +20,7 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: [true, 'Password is required!'],
-        match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, "Password invalid, it should contain at least 8 characters, one uppercase letter, one lowercase letter, and one number!"]
+        match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d\W]{8,}$/, "Password invalid, it should contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character!"]
     },
     image: {
         type: String,
