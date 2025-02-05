@@ -34,10 +34,7 @@ public class PromptController {
         return ResponseEntity.ok("Prompt saved successfully");
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Prompt>> getAllPrompts() {
-        return ResponseEntity.ok(promptService.getAllPrompts());
-    }
+
 
     @GetMapping("/author/{username}")
     public ResponseEntity<List<Prompt>> findByUsername(@PathVariable String username) {

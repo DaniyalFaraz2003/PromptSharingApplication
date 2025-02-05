@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import { PromptCard } from "@/components/PromptCard"
-import type { Prompt } from "@/components/PromptCard"
+import { PromptCard } from "@/components/PromptCard";
 import { useSession } from "next-auth/react"
 import { useAppSelector } from "@/lib/hooks";
+import axios from "axios"
 
 const HeroSection = () => {
 	const name = useAppSelector(state => state.user.username)
@@ -29,54 +29,25 @@ const HeroSection = () => {
 
 const PromptSection = () => {
 
+	const [prompts, setPrompts] = useState([]);
 	const [selectedValue, setSelectedValue] = useState("all");
 
-	const handleValueChange = (value: string) => {
+	const handleValueChange = (value) => {
 		setSelectedValue(value);
 	}
 
-	const prompts: Prompt[] = [
-		{
-			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-			"id": "1",
-			"username": "promptWizard",
-			"title": "Creative Writing",
-			"body": "A prompt to inspire AI to generate unique and engaging story plots.",
-			"tags": ["writing", "storytelling", "creativity"]
-		},
-		{
-			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-			"id": "2",
-			"username": "designPro",
-			"title": "UI/UX Ideas",
-			"body": "A prompt to help AI brainstorm innovative design concepts for modern interfaces.",
-			"tags": ["design", "UI/UX", "creativity"]
-		},
-		{
-			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-			"id": "3",
-			"username": "codeWhisperer",
-			"title": "Debugging Helper",
-			"body": "A prompt to guide AI in identifying and fixing complex code bugs efficiently.",
-			"tags": ["coding", "debugging", "AI"]
-		},
-		{
-			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-			"id": "4",
-			"username": "chatBotMaster",
-			"title": "Customer Support Bot",
-			"body": "A prompt to train AI to respond empathetically to customer queries and complaints.",
-			"tags": ["chatbot", "support", "customer"]
-		},
-		{
-			"image": "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-			"id": "5",
-			"username": "marketingGuru",
-			"title": "Ad Copy Generator",
-			"body": "A prompt to get AI to craft catchy and effective marketing ad copy.",
-			"tags": ["marketing", "ads", "content"]
+	useEffect(() => {
+		const getPrompts = async () => {
+			try {
+				const response = await axios.get("http://localhost:8080/prompt/all");
+				setPrompts(response.data);
+			} catch (ex) {
+				console.log(ex);
+			}
 		}
-	]
+
+		getPrompts();
+	}, [])
 
 
 	return (
@@ -89,12 +60,12 @@ const PromptSection = () => {
 			<div className="grid w-[30%] place-items-center mt-5">
 				<div className="grid w-full grid-cols-2 gap-2 rounded-xl bg-white p-2">
 					<div>
-						<input type="radio" onClick={() => handleValueChange("all")} name="all" id="all" value="all" className="peer hidden" checked={selectedValue === "all"} />
+						<input type="radio" onChange={() => handleValueChange("all")} name="all" id="all" value="all" className="peer hidden" checked={selectedValue === "all"} />
 						<label htmlFor="all" className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-orange-500 peer-checked:font-bold peer-checked:text-white">All Prompts</label>
 					</div>
 
 					<div>
-						<input type="radio" onClick={() => handleValueChange("my")} name="my" id="my" value="my" className="peer hidden" checked={selectedValue === "my"}/>
+						<input type="radio" onChange={() => handleValueChange("my")} name="my" id="my" value="my" className="peer hidden" checked={selectedValue === "my"}/>
 						<label htmlFor="my" className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-orange-500 peer-checked:font-bold peer-checked:text-white">My Prompts</label>
 					</div>
 
