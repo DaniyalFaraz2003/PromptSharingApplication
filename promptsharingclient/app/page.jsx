@@ -39,7 +39,7 @@ const PromptSection = () => {
 	useEffect(() => {
 		const getPrompts = async () => {
 			try {
-				const response = await axios.get("http://localhost:8080/prompt/all");
+				const response = await axios.get("http://localhost:8080/public/all");
 				setPrompts(response.data);
 			} catch (ex) {
 				console.log(ex);
@@ -74,7 +74,7 @@ const PromptSection = () => {
 
 			<div className="mt-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 				{prompts.map((prompt) => (
-					<PromptCard key={prompt.id} {...prompt} />
+					<PromptCard key={prompt.id.timestamp} {...prompt} />
 				))}
 			</div>
 		</div>

@@ -40,7 +40,7 @@ public class PublicController {
     public ResponseEntity<List<Prompt>> getAllPrompts() {
         return ResponseEntity.ok(promptService.getAllPrompts());
     }
-    
+
     @GetMapping("/login")
     public ResponseEntity<?> login(HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
