@@ -20,7 +20,7 @@ const Tag = ({ value, index, handleDataChange }) => {
 	)
 }
 
-const Form = ({ title, body, tags, handleDataChange, handleSubmit }) => {
+const Form = ({ title, content, tags, handleDataChange, handleSubmit }) => {
 	const [tag, setTag] = useState("");
 
 	return (
@@ -35,7 +35,7 @@ const Form = ({ title, body, tags, handleDataChange, handleSubmit }) => {
 				<div className="w-full">
 					<label className="sr-only" htmlFor="message">Prompt</label>
 
-					<textarea value={body} onChange={(event) => handleDataChange("body", event.target.value)} className="textarea textarea-solid max-w-full" placeholder="Type your prompt here" rows={8} id="message"></textarea>
+					<textarea value={content} onChange={(event) => handleDataChange("content", event.target.value)} className="textarea textarea-solid max-w-full" placeholder="Type your prompt here" rows={8} id="message"></textarea>
 				</div>
 
 				<div className='w-full flex gap-4'>
@@ -75,16 +75,16 @@ const Page = () => {
 	const { data: session, status } = useSession();
 	const [viewMode, setViewMode] = useState("input");
 	const [promptData, setPromptData] = useState({
-		image: session?.user?.image || "",
+		author: {
+			image: session?.user?.image || "",
+			username: session?.user?.username || "",
+			name: session?.user?.name || "",
+		},
 		id: "",
-		name: session?.user?.name || "",
-		username: session?.user?.username || "",
 		title: "",
-		body: "",
+		content: "",
 		tags: []
 	})
-
-
 
 	useEffect(() => {
 		if (!session && !name) {
@@ -96,8 +96,11 @@ const Page = () => {
 		if (status === "authenticated") {
 			setPromptData({
 				...promptData,
-				image: session.user.image,
-				username: session.user.username
+				author: {
+					...promptData.author,
+					image: session.user.image,
+					username: session.user.username
+				}
 			})
 		}
 	}, [status])
@@ -113,9 +116,12 @@ const Page = () => {
 				})
 				setPromptData({
 					...promptData,
-					image: response.data.image,
-					username: response.data.username,
-					name: response.data.name
+					author: {
+						...promptData.author,
+						image: response.data.image,
+						username: response.data.username,
+						name: response.data.name
+					}
 				})
 			} catch (error) {
 				console.log(error)
@@ -153,15 +159,31 @@ const Page = () => {
 		}
 	}
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log(promptData);
-		setPromptData({
-			...promptData,
-			title: "",
-			body: "",
-			tags: []
-		})
+		try {
+			const response = await axios.post("http://localhost:8080/prompt/save", {
+				title: promptData.title,
+				content: promptData.content,
+				tags: promptData.tags,
+				author: null
+			}, {
+				auth: {
+					username: promptData.author.username,
+					password: (name && password) ? password : status === "authenticated" ? process.env.NEXT_PUBLIC_ORIGINAL : ""
+				}
+			})
+			if (response.status == 200) {
+				setPromptData({
+					...promptData,
+					title: "",
+					content: "",
+					tags: [],
+				})
+			}
+		} catch (ex) {
+			console.log(ex)
+		}
 	}
 
 	return (
