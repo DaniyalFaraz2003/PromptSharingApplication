@@ -37,6 +37,11 @@ const PromptSection = () => {
 
 	const handleValueChange = (value) => {
 		setSelectedValue(value);
+		if (value == "all") {
+			getAllPrompts();
+		} else {
+			getUserPrompts();
+		}
 	}
 
 	const getUserPrompts = async () => {
@@ -54,10 +59,10 @@ const PromptSection = () => {
 				setPrompts([])
 				return;
 			}
-			const response = await axios.get("http://localhost:8080/public/all", {
+			const response = await axios.get(`http://localhost:8080/prompt/author/${user}`, {
 				auth: {
-					username: "",
-					password: "",
+					username: user,
+					password: pass,
 				}
 			});
 			setPrompts(response.data);
@@ -67,7 +72,12 @@ const PromptSection = () => {
 	}
 
 	const getAllPrompts = async () => {
-
+		try {
+			const response = await axios.get("http://localhost:8080/public/all");
+			setPrompts(response.data);
+		} catch (ex) {
+			console.log(ex);
+		}
 	}
 
 	useEffect(() => {
