@@ -35,7 +35,6 @@ public class PromptController {
     }
 
 
-
     @GetMapping("/author/{username}")
     public ResponseEntity<List<Prompt>> findByUsername(@PathVariable String username) {
         User author = userService.findByUserName(username);

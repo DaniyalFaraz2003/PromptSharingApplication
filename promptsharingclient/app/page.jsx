@@ -28,12 +28,46 @@ const HeroSection = () => {
 }
 
 const PromptSection = () => {
+	const username = useAppSelector(state => state.user.username)
+	const password = useAppSelector(state => state.user.password)
+	const { data: session, status } = useSession()
 
 	const [prompts, setPrompts] = useState([]);
 	const [selectedValue, setSelectedValue] = useState("all");
 
 	const handleValueChange = (value) => {
 		setSelectedValue(value);
+	}
+
+	const getUserPrompts = async () => {
+		let user = "";
+		let pass = "";
+		try {
+			if (session) {
+				user = session?.user?.username;
+				pass = process.env.NEXT_PUBLIC_ORIGINAL;
+			}
+			else if (username && password) {
+				user = username;
+				pass = password
+			} else {
+				setPrompts([])
+				return;
+			}
+			const response = await axios.get("http://localhost:8080/public/all", {
+				auth: {
+					username: "",
+					password: "",
+				}
+			});
+			setPrompts(response.data);
+		} catch (ex) {
+			console.log(ex);
+		}
+	}
+
+	const getAllPrompts = async () => {
+
 	}
 
 	useEffect(() => {
@@ -65,7 +99,7 @@ const PromptSection = () => {
 					</div>
 
 					<div>
-						<input type="radio" onChange={() => handleValueChange("my")} name="my" id="my" value="my" className="peer hidden" checked={selectedValue === "my"}/>
+						<input type="radio" onChange={() => handleValueChange("my")} name="my" id="my" value="my" className="peer hidden" checked={selectedValue === "my"} />
 						<label htmlFor="my" className="block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-orange-500 peer-checked:font-bold peer-checked:text-white">My Prompts</label>
 					</div>
 
